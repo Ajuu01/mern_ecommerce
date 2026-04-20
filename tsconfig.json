@@ -4,6 +4,8 @@
     "target": "ES6",
     "esModuleInterop": true,
     "moduleResolution": "NodeNext",
-    "verbatimModuleSyntax": false
+    "verbatimModuleSyntax": false,
+    "experimentalDecorators": true,                   /* Enable experimental support for legacy experimental decorators. */
+    "emitDecoratorMetadata": true, 
   }
 }
