@@ -1,7 +1,13 @@
 import { Sequelize } from "sequelize-typescript"
 import { envConfig } from "../config/config"
 
-const sequelize=new Sequelize(envConfig.connection_string as string)
+const sequelize=new Sequelize(envConfig.connection_string as string,{
+    models:[__dirname+'/models']
+})
+
+sequelize.sync({force : false,alter:false}).then(()=>{
+    console.log("synced !!")
+})
 
 try{
     sequelize.authenticate()
