@@ -1,6 +1,7 @@
 import { Request,Response } from "express";
 import User from "../database/models/userModel"
 import bcrypt from 'bcrypt'
+import generateToken from "../services/generateToken";
 
 class userController{
     static async Register(req:Request,res:Response){
@@ -48,8 +49,10 @@ class userController{
                     message:"Incorrect Password"
                 })
             }else{
+                const token=generateToken(user.id)
                 res.status(200).json({
-                    message:"Logged in successfully"
+                    message:"Logged in successfully",
+                    token
                 })
             }
         }
