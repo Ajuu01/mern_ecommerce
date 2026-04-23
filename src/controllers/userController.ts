@@ -2,6 +2,8 @@ import { Request,Response } from "express";
 import User from "../database/models/userModel"
 import bcrypt from 'bcrypt'
 import generateToken from "../services/generateToken";
+import generateOtp from "../services/generateOtp";
+import sendMail from "../services/sendMail";
 
 class userController{
     static async Register(req:Request,res:Response){
@@ -56,6 +58,37 @@ class userController{
                 })
             }
         }
+    }
+    static async handleForgotPassword(req:Request,res:Response){
+        const {email}=req.body
+        if(!email){
+            res.status(200).json({message:"Please provide email"})
+            return 
+        } 
+        const [user]=await User.findAll({
+            where:{
+                email:email
+            }
+        }
+        )
+        if(!user){
+            res.status(400).json({
+                message:"Email not registered"
+            })
+            return
+        }
+        const otp=generateOtp()
+        sendMail({
+            to:email,
+            subject:"Change Password",
+            text:`Here is your otp ${otp}`
+        })
+        user.otp=otp.toString()
+        user.otpGeneratedTime=Date.now().toString()
+        await user.save()
+        res.status(200).json({
+            message:"Password Reset"
+        })
     }
 }
 
