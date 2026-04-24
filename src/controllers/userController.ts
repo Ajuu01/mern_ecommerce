@@ -4,6 +4,9 @@ import bcrypt from 'bcrypt'
 import generateToken from "../services/generateToken";
 import generateOtp from "../services/generateOtp";
 import sendMail from "../services/sendMail";
+import sendResponse from "../services/sendResponse";
+import findDataByEmail from "../services/findDataByEmail";
+import checkOtpexpiration from "../services/checkOtpExpiration";
 
 class userController{
     static async Register(req:Request,res:Response){
@@ -89,6 +92,49 @@ class userController{
         res.status(200).json({
             message:"Password Reset"
         })
+    }
+    static async verifyOtp(req:Request,res:Response){
+        const {otp,email}=req.body
+        if(!otp || !email){
+            sendResponse(res,404,"Please provide with email and otp")
+            return
+        }
+        const user=findDataByEmail(User,email)
+        if(!user){
+            sendResponse(res,404,"No user with such email!!")
+            return
+        }
+        const [data]=await User.findAll({
+            where:{
+                email,
+                otp
+            }
+        })
+        if(!data){
+            sendResponse(res,404,"Invalid OTP")
+            return
+        }
+        const otpGeneratedTime=data.otpGeneratedTime
+        checkOtpexpiration(res,otpGeneratedTime,120000)
+    }
+    static async resetPassword(req:Request,res:Response){
+        const {newPassword,confirmPassword,email}=req.body
+        if(!newPassword || !confirmPassword || !email){
+            sendResponse(res,400,"Please provide new password")
+            return
+        }
+        if(newPassword!==confirmPassword){
+            sendResponse(res,400,"New password doesn't match confirm password")
+            return
+        }
+        const user=await findDataByEmail(User,email)
+        if(!user){
+            sendResponse(res,404,"No user with such email")
+            return
+        }
+        user.password=bcrypt.hashSync(newPassword,12)
+        await user.save()
+        sendResponse(res,200,"Password reset successfully")
     }
 }
 
