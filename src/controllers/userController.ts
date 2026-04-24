@@ -18,6 +18,15 @@ class userController{
             })
             return
         }
+        const [data]=await User.findAll({
+            where:{
+                email:email
+            }
+        })
+        if(data){
+            sendResponse(res,400,"Please try again later!!")
+            return
+        }
 
         const user=await User.create({
             username,
