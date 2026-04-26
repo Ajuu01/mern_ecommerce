@@ -29,6 +29,17 @@ class categoryController{
             sendResponse(res,400,"Please provide category name!!")
             return
         }
+        const [category]=await Category.findAll({
+            where:{
+                categoryName:categoryName
+            }
+        })
+        if(category){
+            res.status(400).json({
+                message:"This category already exists"
+            })
+            return
+        }
         await Category.create({
             categoryName
         })
