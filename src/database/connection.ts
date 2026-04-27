@@ -7,7 +7,7 @@ const sequelize=new Sequelize(envConfig.connection_string as string,{
     models: [__dirname+'/models']
 })
 
-sequelize.sync({force : false,alter:false}).then(()=>{
+sequelize.sync({force : false,alter:true}).then(()=>{
     console.log("synced !!")
 })
 
