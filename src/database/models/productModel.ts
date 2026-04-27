@@ -8,6 +8,12 @@ import { Table,Column,Model,DataType, AllowNull } from "sequelize-typescript"
 
 class Product extends Model{
     @Column({
+        primaryKey:true,
+        type:DataType.UUID,
+        defaultValue:DataType.UUIDV4
+    })
+    declare id:string
+    @Column({
         type:DataType.STRING,
         allowNull:false
     })
