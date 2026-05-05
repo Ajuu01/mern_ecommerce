@@ -2,6 +2,11 @@ import { Sequelize } from "sequelize-typescript"
 import { envConfig } from "../config/config"
 import Product from "./models/productModel"
 import Category from "./models/categoryModel"
+import Order from "./models/orderModel"
+import User from "./models/userModel"
+import Payment from "./models/paymentModel"
+import OrderDetails from "./models/orderDetails"
+
 
 const sequelize=new Sequelize(envConfig.connection_string as string,{
     models: [__dirname+'/models']
@@ -25,4 +30,22 @@ try{
 
 Product.belongsTo(Category)
 Category.hasOne(Product)
+
+// User x Order
+Order.belongsTo(User)
+User.hasMany(Order)
+
+// Payment x Order
+Payment.belongsTo(Order)
+Order.hasOne(Payment)
+
+// Order x OrderDetails
+OrderDetails.belongsTo(Order)
+Order.hasOne(OrderDetails)
+
+// Product x OrderDetails
+OrderDetails.belongsTo(Product)
+Product.hasMany(OrderDetails)
+
+
 export default sequelize
