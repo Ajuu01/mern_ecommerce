@@ -6,6 +6,7 @@ import Order from "./models/orderModel"
 import User from "./models/userModel"
 import Payment from "./models/paymentModel"
 import OrderDetails from "./models/orderDetails"
+import Cart from "./models/cartModel"
 
 
 const sequelize=new Sequelize(envConfig.connection_string as string,{
@@ -46,6 +47,14 @@ Order.hasOne(OrderDetails)
 // Product x OrderDetails
 OrderDetails.belongsTo(Product)
 Product.hasMany(OrderDetails)
+
+// User x Cart
+User.hasOne(Cart)
+Cart.belongsTo(User)
+
+// Product x Cart
+Product.hasMany(Cart)
+Cart.belongsTo(User)
 
 
 export default sequelize
