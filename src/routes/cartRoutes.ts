@@ -10,4 +10,4 @@ router.route("/").post(UserMiddleware.isUserLoggedIn,UserMiddleware.restrictTo(R
 router.route("/:productId").delete(UserMiddleware.isUserLoggedIn,UserMiddleware.restrictTo(Role.Customer),errorHandler(CartController.deleteMyCartItem)).patch(UserMiddleware.isUserLoggedIn,UserMiddleware.restrictTo(Role.Customer),errorHandler(CartController.updateCartItem))
 
 
-export default router
+export default router 

@@ -8,7 +8,7 @@ interface AuthRequest extends Request{
     }
 }
 class CartController{
-    async addToCart(req:AuthRequest,res:Response){
+    static async addToCart(req:AuthRequest,res:Response){
         const userId=req.user?.id
         const {productId,quantity}=req.body
         if(!productId || !quantity){
@@ -36,7 +36,7 @@ class CartController{
             message:"Product added to cart"
         })
     }
-    async getMyCartItems(req:AuthRequest,res:Response){
+    static async getMyCartItems(req:AuthRequest,res:Response){
         const userId=req.user?.id
         const cartItems=await Cart.findAll({
             where:{
@@ -60,7 +60,7 @@ class CartController{
             })
         }
     }
-    async deleteMyCartItem(req:AuthRequest,res:Response){
+    static async deleteMyCartItem(req:AuthRequest,res:Response){
         const userId=req.user?.id
         const {productId}=req.params
         const product=await Product.findByPk(productId as string)
@@ -81,7 +81,7 @@ class CartController{
             message:"Cart item deleted successfully"
         })
     }
-    async updateCartItem(req:AuthRequest,res:Response){
+    static async updateCartItem(req:AuthRequest,res:Response){
         const userId=req.user?.id
         const {productId}=req.params
         const {quantity}=req.body
@@ -112,4 +112,4 @@ class CartController{
     }
 }
 
-export default new CartController()
+export default CartController

@@ -49,12 +49,12 @@ OrderDetails.belongsTo(Product)
 Product.hasMany(OrderDetails)
 
 // User x Cart
-User.hasOne(Cart)
+User.hasMany(Cart)
 Cart.belongsTo(User)
 
 // Product x Cart
 Product.hasMany(Cart)
-Cart.belongsTo(User)
+Cart.belongsTo(Product)
 
 
 export default sequelize

@@ -1,3 +1,4 @@
+import { UUID } from "crypto";
 import { Table,Column,DataType,Model } from "sequelize-typescript";
 
 @Table({
@@ -12,6 +13,7 @@ class Cart extends Model{
         type:DataType.UUID,
         defaultValue:DataType.UUIDV4
     })
+    declare id:string
 
     @Column({
         type:DataType.INTEGER,
